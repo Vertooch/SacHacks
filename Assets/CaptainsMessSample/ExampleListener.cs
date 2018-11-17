@@ -16,7 +16,6 @@ public class ExampleListener : CaptainsMessListener
 	};
 	[HideInInspector]
 	public NetworkState networkState = NetworkState.Init;
-	public Text networkStateField;
 	
 	public GameObject gameSessionPrefab;
 	public ExampleGameSession gameSession;
@@ -90,10 +89,5 @@ public class ExampleListener : CaptainsMessListener
 	{
 		Debug.Log("ABORT!");
 		gameSession.OnAbortGame();
-	}
-
-	void Update()
-	{
-		networkStateField.text = networkState.ToString();	
 	}
 }

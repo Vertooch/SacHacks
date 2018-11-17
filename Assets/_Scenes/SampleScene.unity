@@ -477,7 +477,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mess: {fileID: 0}
   networkState: 0
-  networkStateField: {fileID: 639904925}
   gameSessionPrefab: {fileID: 179928, guid: af5e77654c024423d9250482154ceea3, type: 2}
   gameSession: {fileID: 0}
 --- !u!4 &1834411671

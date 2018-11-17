@@ -79,7 +79,7 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	{
 		transform.SetParent(GameObject.Find("Canvas/PlayerContainer").transform, false);
 
-		image.color = myColour;	
+		//image.color = myColour;	
 		nameField.text = deviceName;
 		readyField.gameObject.SetActive(true);
 

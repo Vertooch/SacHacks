@@ -92,6 +92,7 @@ public class CaptainsMess : MonoBehaviour
 
     public void AutoConnect()
     {
+        Debug.Log("attempting connection");
         networkManager.InitNetworkTransport();
         networkManager.minPlayers = minPlayers;
         networkManager.AutoConnect();
