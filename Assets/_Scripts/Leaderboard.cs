@@ -7,9 +7,6 @@ public class Leaderboard : MonoBehaviour {
 
     private void Awake()
     {
-        AddNewHighScore("DonkyKong", 12000);
-        AddNewHighScore("Kirby", 8000);
-
         DownloadHighScores();
     }
 
