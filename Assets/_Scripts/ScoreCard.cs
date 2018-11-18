@@ -21,9 +21,6 @@ public class ScoreCard : MonoBehaviour {
     {
         stars[numStars].Activate();
         numStars++;
-
-        if (numStars >= 3)
-            Debug.Log("Winner!");
     }
 
 }

@@ -150,9 +150,11 @@ public class ExampleGameSession : NetworkBehaviour
 		specialMessage = PlayerWithHighestScore().deviceName + " WINS!";
 		yield return new WaitForSeconds(3);
 		specialMessage = "";
+        Debug.Log("gameover");
 
 		// Game over
 		gameState = GameState.GameOver;
+        networkListener.GameOver();
 	}
 
 	[Server]
@@ -184,8 +186,9 @@ public class ExampleGameSession : NetworkBehaviour
 	[Server]
 	public void PlayAgain()
 	{
-		StartCoroutine(RunGame());
-	}
+		//StartCoroutine(RunGame());
+        gameState = GameState.Lobby;
+    }
 
 	void Update()
 	{

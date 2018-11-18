@@ -103,6 +103,7 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	public void WinRound()
     {
         scoreCard.EarnStar();
+        totalPoints++;
     }
 
 	[ClientRpc]
