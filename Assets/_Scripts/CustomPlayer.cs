@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
 
 public class CustomPlayer : MonoBehaviour
 {
@@ -25,6 +25,8 @@ public class CustomPlayer : MonoBehaviour
 
     private Transform[] avatarParts;
 
+    public InputField playerNameField;
+    
     private int partTypeIndex;
     private int[] partIndices;
     private List<PartType> types;
@@ -83,6 +85,31 @@ public class CustomPlayer : MonoBehaviour
         tNextButton.transform.localScale = new Vector3(50, 50, 1);
         tPrevButton.transform.localScale = new Vector3(50, 50, 1);
 
+        UpdateNullBodyPart(tPrevButton, types[partTypeIndex], prevPartIndex, true);
+        UpdateNullBodyPart(tNextButton, types[partTypeIndex], nextPartIndex, true);
+
+    }
+
+    private void UpdateNullBodyPart(GameObject bodyPart, PartType type, int index, bool enable)
+    {
+        // Remove "null" body parts (no hat, no weapon, etc...)
+        switch (type)
+        {
+            default:
+                break;
+            case PartType.Mustache:
+            case PartType.Hat:
+            case PartType.Weapon:
+                if (index == 0)
+                {
+                    // Turn off the SpriteRenderer
+                    bodyPart.GetComponent<SpriteRenderer>().enabled = enable;
+
+                    // Scale down the object
+                    bodyPart.transform.localScale = new Vector3(25, 25, 1);
+                }
+                break;
+        }
     }
 
     public void Start()
@@ -96,12 +123,29 @@ public class CustomPlayer : MonoBehaviour
             types.Add(type);
         }
 
-        // Instantiate initial next and prev button objects
-        UpdatePrevNextButtons();
-
         // Initialize button text
         UpdatePrevNextPartTypeText();
 
+        // Prevent any null body parts from being rendered
+        for (int i = 0; i < types.Count; i++)
+        {
+            foreach (Transform part in avatarParts[i])
+            {
+                UpdateNullBodyPart(part.gameObject, types[i], partIndices[i], false);
+            }
+        }
+
+        // Instantiate initial next and prev button objects
+        UpdatePrevNextButtons();
+
+        // Add listener for input field
+        playerNameField.onValueChanged.AddListener(delegate { GlobalPlayer.SetPlayerName(playerNameField.text); } );
+
+        // Set text if player has set a name before
+        if (!GlobalPlayer.playerNameIsDefault)
+        {
+            playerNameField.text = GlobalPlayer.playerName;
+        }
     }
 
     public void IncrementPartOption()
@@ -127,11 +171,14 @@ public class CustomPlayer : MonoBehaviour
         }
 
         // Instantiate new children in parent GameObject
-        Instantiate(
+        GameObject bodyPart = Instantiate(
             inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
             avatarParts[partTypeIndex],
             false);
 
+        // Disable if current option is null
+        UpdateNullBodyPart(bodyPart, types[partTypeIndex], partIndices[partTypeIndex], false);
+            
         UpdatePrevNextButtons();
         GlobalPlayer.SetPart(types[partTypeIndex], partIndices[partTypeIndex]);
     }
@@ -160,10 +207,14 @@ public class CustomPlayer : MonoBehaviour
         }
 
         // Instantiate new children in parent GameObject
-        Instantiate(
+        GameObject bodyPart = Instantiate(
             inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
             avatarParts[partTypeIndex],
             false);
+
+
+        // Disable if current option is null
+        UpdateNullBodyPart(bodyPart, types[partTypeIndex], partIndices[partTypeIndex], false);
 
         UpdatePrevNextButtons();
         GlobalPlayer.SetPart(types[partTypeIndex], partIndices[partTypeIndex]);

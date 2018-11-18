@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ExamplePlayerScript : CaptainsMessPlayer
 {
@@ -15,9 +16,12 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	[SyncVar]
 	public Color myColour;
 
-	// Simple game states for a dice-rolling game
+    [SyncVar]
+    public string avatarOptions;
 
-	[SyncVar]
+    // Simple game states for a dice-rolling game
+
+    [SyncVar]
 	public int rollResult;
 
 	[SyncVar]
@@ -33,7 +37,15 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 
 		myColour = UnityEngine.Random.ColorHSV(0,1,1,1,1,1);
 		CmdSetCustomPlayerInfo(myColour);
-	}
+
+        //foreach(int val in GlobalPlayer.selectedParts.Values)
+        //{
+        //    avatarOptions += val.ToString();
+        //    avatarOptions += ",";
+        //}
+        //avatarOptions = avatarOptions.Remove(avatarOptions.Length - 1);
+        //CmdSetAvatar(avatarOptions);
+    }
 
 	[Command]
 	public void CmdSetCustomPlayerInfo(Color aColour)
@@ -41,7 +53,13 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 		myColour = aColour;
 	}
 
-	[Command]
+    [Command]
+    public void CmdSetAvatar(string avatarString)
+    {
+        avatarOptions = avatarString;
+    }
+
+    [Command]
 	public void CmdRollDie()
 	{
 		rollResult = UnityEngine.Random.Range(1, 7);
@@ -79,7 +97,8 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	{
 		transform.SetParent(GameObject.Find("Canvas/PlayerContainer").transform, false);
 
-		//image.color = myColour;	
+        //image.color = myColour;
+        GetComponent<LobbyAvatar>().SetupAvatar(avatarOptions);
 		nameField.text = deviceName;
 		readyField.gameObject.SetActive(true);
 

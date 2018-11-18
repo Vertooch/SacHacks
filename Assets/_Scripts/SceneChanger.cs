@@ -24,4 +24,9 @@ public class SceneChanger : MonoBehaviour {
     {
         SceneManager.LoadScene("ItemShop");
     }
+
+    public void GoToLobby()
+    {
+        SceneManager.LoadScene("GameLobby");
+    }
 }

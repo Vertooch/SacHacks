@@ -23,11 +23,11 @@ public class DiscoveredServer : BroadcastData
 public class CaptainsMessClient : NetworkDiscovery
 {
 	public CaptainsMessNetworkManager networkManager;
-	public Dictionary<string, DiscoveredServer> discoveredServers;
-	public const float ServerKeepAliveTime = 5.0f;
+	public Dictionary<string, DiscoveredServer> discoveredServers = new Dictionary<string, DiscoveredServer>();
+    public const float ServerKeepAliveTime = 5.0f;
 	public bool autoJoin;
 
-	public Queue<string> receivedBroadcastLog;
+	public Queue<string> receivedBroadcastLog = new Queue<string>();
 
 	private const int maxLogLines = 4;
 	private const string broadcastLogTokens = "-.";
@@ -35,8 +35,10 @@ public class CaptainsMessClient : NetworkDiscovery
 
 	void Start()
 	{
-		discoveredServers = new Dictionary<string, DiscoveredServer>();
-		receivedBroadcastLog = new Queue<string>();
+        if (discoveredServers == null)
+		    discoveredServers = new Dictionary<string, DiscoveredServer>();
+        if (receivedBroadcastLog == null)
+		    receivedBroadcastLog = new Queue<string>();
 		showGUI = false;
 
 		InvokeRepeating("CleanServerList", 3, 1);
@@ -50,7 +52,12 @@ public class CaptainsMessClient : NetworkDiscovery
 
 	public void Reset()
 	{
-		discoveredServers.Clear();
+        if (discoveredServers == null)
+            discoveredServers = new Dictionary<string, DiscoveredServer>();
+        if (receivedBroadcastLog == null)
+            receivedBroadcastLog = new Queue<string>();
+
+        discoveredServers.Clear();
 		receivedBroadcastLog.Clear();
 		autoJoin = false;
 	}
