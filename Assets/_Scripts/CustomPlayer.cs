@@ -109,6 +109,7 @@ public class CustomPlayer : MonoBehaviour
             false);
 
         UpdatePrevNextButtons();
+        GlobalPlayer.SetPart(types[partTypeIndex], partIndices[partTypeIndex]);
     }
 
     public void DecrementPartOption()
@@ -141,6 +142,7 @@ public class CustomPlayer : MonoBehaviour
             false);
 
         UpdatePrevNextButtons();
+        GlobalPlayer.SetPart(types[partTypeIndex], partIndices[partTypeIndex]);
     }
 
     public void IncrementAvatarPart()
