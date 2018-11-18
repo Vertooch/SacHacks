@@ -68,11 +68,28 @@ public class DisplayAvatar : MonoBehaviour
             Destroy(part.gameObject);
         }
 
-        // Instantiate new children in parent GameObject
-        Instantiate(
+        bool drawPart = true;
+
+        // Instantiate new children in parent GameObject if the object is not empty (hat, weapon, etc)
+        switch (type)
+        {
+            case PartType.Hat:
+            case PartType.Weapon:
+            case PartType.Mustache:
+                if (GlobalPlayer.IndexForType(type) == 0)
+                {
+                    drawPart = false;
+                }
+                break;
+        }
+
+        if (drawPart)
+        {
+            Instantiate(
             inventory.partForTypeIndex(type, GlobalPlayer.IndexForType(type)),
             partTransform,
             false);
+        }
     }
 
 }

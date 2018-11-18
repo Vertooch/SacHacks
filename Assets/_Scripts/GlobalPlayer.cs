@@ -79,6 +79,14 @@ public static class GlobalPlayer
         bank += money;
     }
 
+    public static int GetBankAmount()
+    {
+        if (!isSetup)
+            SetupPlayer();
+
+        return bank;
+    }
+
     public static void UnlockItem(int unlockId, int cost)
     {
         if (!isSetup)

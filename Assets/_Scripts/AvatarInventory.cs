@@ -32,7 +32,6 @@ public class AvatarInventory : MonoBehaviour {
         inventoryParts[PartType.Body] = bodyOptions;
         inventoryParts[PartType.Weapon] = weaponOptions;
     }
-	
 
     public GameObject partForTypeIndex(PartType type, int index)
     {
@@ -41,4 +40,33 @@ public class AvatarInventory : MonoBehaviour {
 
         return inventoryParts[type][index].gameObject;
     }
+
+    public void SetInventoryParts(PartType type, BodyPart[] bodyParts)
+    {
+        switch (type)
+        {
+            case PartType.Body:
+                bodyOptions = bodyParts;
+                break;
+            case PartType.Head:
+                headOptions = bodyParts;
+                break;
+            case PartType.Eyes:
+                eyesOptions = bodyParts;
+                break;
+            case PartType.Hat:
+                hatOptions = bodyParts;
+                break;
+            case PartType.Weapon:
+                weaponOptions = bodyParts;
+                break;
+            case PartType.Mouth:
+                mouthOptions = bodyParts;
+                break;
+            case PartType.Mustache:
+                mustacheOptions = bodyParts;
+                break;
+        }
+    }
+
 }

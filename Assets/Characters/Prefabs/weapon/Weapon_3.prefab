@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4182074375747826}
   - component: {fileID: 212174866078340744}
-  - component: {fileID: 114482335358930478}
+  - component: {fileID: 114206864544332128}
   m_Layer: 0
   m_Name: Weapon_3
   m_TagString: Untagged
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114482335358930478
+--- !u!114 &114206864544332128
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,10 +49,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1164148998314006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6420c0c66473c4b25825481e9419a0f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 570d5d8417ec84ac1a122193e449c7fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 6
+  id: 11
+  cost: 150
 --- !u!212 &212174866078340744
 SpriteRenderer:
   m_ObjectHideFlags: 1
