@@ -18,7 +18,7 @@ public class Leaderboard : MonoBehaviour {
 
     IEnumerator DownloadHighScoresFromDatabase()
     {
-        WWW www = new WWW(webUrl + publicCode + "/pipe/0/5");
+        WWW www = new WWW(webUrl + publicCode + "/pipe/0/10");
         yield return www;
 
         if (string.IsNullOrEmpty(www.error))
@@ -48,13 +48,13 @@ public class Leaderboard : MonoBehaviour {
     }
 
     void FormatHighScores(string textStream) {
-        scoreEntries = new string[5];
+        scoreEntries = new string[10];
         string[] entries = textStream.Split(new char[] {'\n' }, System.StringSplitOptions.RemoveEmptyEntries);
         HighScoresList = new HighScore[entries.Length];
         numScores = entries.Length;
-        if (numScores > 4)
+        if (numScores > 9)
         {
-            numScores = 4;
+            numScores = 9;
         }
         for (int i = 0; i < numScores; i++)
         {
@@ -62,7 +62,21 @@ public class Leaderboard : MonoBehaviour {
             string username = entryInfo[0];
             int scoreNum = int.Parse(entryInfo[1]);
             HighScoresList[i] = new HighScore(username, scoreNum);
-            //print(HighScoresList[i].username + ": " + HighScoresList[i].score);
+            //for (int n = 0; n < numScores; n++)
+            //{
+            //    if (HighScoresList[i].username == HighScoresList[n].username) {
+            //        if (HighScoresList[i].score < HighScoresList[n].score)
+            //        {
+            //            WWW www = new WWW(webUrl + privateCode + "/delete/" + HighScoresList[i].username);
+            //            DownloadHighScores();
+            //        }
+            //        if (HighScoresList[i].score > HighScoresList[n].score)
+            //        {
+            //            WWW www = new WWW(webUrl + privateCode + "/delete/" + HighScoresList[n].username);
+            //            DownloadHighScores();
+            //        }
+            //    }
+            //}
             scoreEntries[i] = HighScoresList[i].username + ": " + HighScoresList[i].score;
             GameObject score = Instantiate(scoreEntry, scrollContent.transform, false) as GameObject;
             score.GetComponent<Text>().text = scoreEntries[i];
