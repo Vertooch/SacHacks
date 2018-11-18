@@ -17,7 +17,7 @@ public class ExamplePlayerScript : CaptainsMessPlayer
     // Simple game states for a dice-rolling game
 
     [SyncVar]
-	public int rollResult;
+	public int score;
 
 	[SyncVar]
 	public int totalPoints;
@@ -61,9 +61,9 @@ public class ExamplePlayerScript : CaptainsMessPlayer
     }
 
     [Command]
-	public void CmdRollDie()
+	public void CmdSubmitScore(int _score)
 	{
-		rollResult = UnityEngine.Random.Range(1, 7);
+        score = _score;
 	}
 
 	[Command]
@@ -161,16 +161,6 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 							SendNotReadyToBeginMessage();
 						} else {
 							SendReadyToBeginMessage();
-						}
-					}
-				}
-				else if (gameSession.gameState == GameState.WaitingForRolls)
-				{
-					if (rollResult == 0)
-					{
-						if (GUILayout.Button("Roll Die", GUILayout.Width(Screen.width * 0.3f), GUILayout.Height(100)))
-						{
-							CmdRollDie();
 						}
 					}
 				}

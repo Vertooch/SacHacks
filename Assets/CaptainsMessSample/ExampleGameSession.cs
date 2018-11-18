@@ -11,7 +11,7 @@ public enum GameState
 	Connecting,
 	Lobby,
 	Countdown,
-	WaitingForRolls,
+	WaitingForScores,
 	Scoring,
 	GameOver
 }
@@ -19,6 +19,9 @@ public enum GameState
 public class ExampleGameSession : NetworkBehaviour
 {
 	public Text gameStateField;
+    public GameObject gameField;
+    public GameObject[] games;
+    private int gameIndex = 0;
 
 	public static ExampleGameSession instance;
 
@@ -50,7 +53,10 @@ public class ExampleGameSession : NetworkBehaviour
 	[Server]
 	public void OnStartGame(List<CaptainsMessPlayer> aStartingPlayers)
 	{
-		players = aStartingPlayers.Select(p => p as ExamplePlayerScript).ToList();
+        foreach (GameObject game in games)
+            ClientScene.RegisterPrefab(game);
+
+        players = aStartingPlayers.Select(p => p as ExamplePlayerScript).ToList();
 
 		RpcOnStartedGame();
 		foreach (ExamplePlayerScript p in players) {
@@ -110,27 +116,30 @@ public class ExampleGameSession : NetworkBehaviour
 			p.totalPoints = 0;
 		}
 
-		while (MaxScore() < 3)
+		while (MaxPoints() < 3)
 		{
 			// Reset rolls
 			foreach (ExamplePlayerScript p in players) {
-				p.rollResult = 0;
+				p.score = 0;
 			}
 
-			// Wait for all players to roll
-			gameState = GameState.WaitingForRolls;
+            SpawnGame();
 
-			while (!AllPlayersHaveRolled()) {
+			// Wait for all players to roll
+			gameState = GameState.WaitingForScores;
+
+			while (!AllPlayersHaveScored()) {
 				yield return null;
 			}
 
 			// Award point to winner
 			gameState = GameState.Scoring;
 
-			List<ExamplePlayerScript> scoringPlayers = PlayersWithHighestRoll();
+            ClearGame();
+
+			List<ExamplePlayerScript> scoringPlayers = PlayersWithHighestScore();
 			if (scoringPlayers.Count == 1)
 			{
-                Debug.Log("award point");
                 scoringPlayers[0].totalPoints += 1;
                 scoringPlayers[0].cash += 10;
                 specialMessage = scoringPlayers[0].playerName + " scores 1 point!";
@@ -157,21 +166,36 @@ public class ExampleGameSession : NetworkBehaviour
         gameState = GameState.GameOver;
     }
 
-	[Server]
-	bool AllPlayersHaveRolled()
+    private void SpawnGame()
+    {
+        Debug.Log("spawning game..." + gameIndex);
+        GameObject newGameObject = Instantiate(games[gameIndex], gameField.transform, false);
+        Minigame newGame = newGameObject.GetComponent<Minigame>();
+
+        gameIndex = (gameIndex + 1) % games.Length;
+    }
+
+    private void ClearGame()
+    {
+        foreach (Transform child in gameField.transform)
+            Destroy(child.gameObject);
+    }
+
+    [Server]
+    bool AllPlayersHaveScored()
 	{
-		return players.All(p => p.rollResult > 0);
+		return players.All(p => p.score != 0);
 	}
 
 	[Server]
-	List<ExamplePlayerScript> PlayersWithHighestRoll()
+    List<ExamplePlayerScript> PlayersWithHighestScore()
 	{
-		int highestRoll = players.Max(p => p.rollResult);
-		return players.Where(p => p.rollResult == highestRoll).ToList();
+        int highestScore = players.Max(p => p.score);
+		return players.Where(p => p.score == highestScore).ToList();
 	}
 
 	[Server]
-	int MaxScore()
+    int MaxPoints()
 	{
 		return players.Max(p => p.totalPoints);
 	}
@@ -196,7 +220,7 @@ public class ExampleGameSession : NetworkBehaviour
 		{
 			if (gameState == GameState.Countdown)
 			{
-				message = "Game Starting in " + Mathf.Ceil(networkListener.mess.CountdownTimer()) + "...";
+				message = "Math Starting in " + Mathf.Ceil(networkListener.mess.CountdownTimer()) + "...";
 			}
 			else if (specialMessage != "")
 			{

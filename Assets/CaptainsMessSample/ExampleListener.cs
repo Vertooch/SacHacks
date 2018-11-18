@@ -43,8 +43,9 @@ public class ExampleListener : CaptainsMessListener
 		ExampleGameSession oldSession = FindObjectOfType<ExampleGameSession>();
 		if (oldSession == null)
 		{
-			GameObject serverSession = Instantiate(gameSessionPrefab);
-			NetworkServer.Spawn(serverSession);
+            GameObject serverSession = Instantiate(gameSessionPrefab, GameObject.Find("Canvas").transform, false);
+
+            NetworkServer.Spawn(serverSession);
 		}
 		else
 		{
