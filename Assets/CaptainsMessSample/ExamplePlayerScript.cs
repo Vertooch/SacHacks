@@ -7,17 +7,12 @@ using System.Collections.Generic;
 
 public class ExamplePlayerScript : CaptainsMessPlayer
 {
-	public Image image;
-	public Text nameField;
 	public Text readyField;
-	public Text rollResultField;
-	public Text totalPointsField;
-
-	[SyncVar]
-	public Color myColour;
 
     [SyncVar]
     public string avatarOptions;
+    [SyncVar]
+    public string playerName;
 
     // Simple game states for a dice-rolling game
 
@@ -27,31 +22,31 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	[SyncVar]
 	public int totalPoints;
 
+    private ScoreCard scoreCard;
+
 
 	public override void OnStartLocalPlayer()
 	{
 		base.OnStartLocalPlayer();
 
-		// Send custom player info
-		// This is an example of sending additional information to the server that might be needed in the lobby (eg. colour, player image, personal settings, etc.)
 
-		myColour = UnityEngine.Random.ColorHSV(0,1,1,1,1,1);
-		CmdSetCustomPlayerInfo(myColour);
-
-        foreach(int val in GlobalPlayer.selectedParts.Values)
+        foreach(int val in GlobalPlayer.AllParts().Values)
         {
             avatarOptions += val.ToString();
             avatarOptions += ",";
         }
         avatarOptions = avatarOptions.Remove(avatarOptions.Length - 1);
         CmdSetAvatar(avatarOptions);
+
+        playerName = GlobalPlayer.playerName;
+        CmdSetName(playerName);
     }
 
-	[Command]
-	public void CmdSetCustomPlayerInfo(Color aColour)
-	{
-		myColour = aColour;
-	}
+    [Command]
+    public void CmdSetName(string name)
+    {
+        playerName = name;
+    }
 
     [Command]
     public void CmdSetAvatar(string avatarString)
@@ -88,46 +83,49 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 		}
 		else
 		{
-			readyField.text = "not ready";
+			readyField.text = "Not Ready";
 			readyField.color = Color.red;
 		}
 	}
 
 	void ShowPlayer()
 	{
-		transform.SetParent(GameObject.Find("Canvas/PlayerContainer").transform, false);
+        transform.SetParent(GameObject.Find("Canvas/PlayerContainer/player"+(playerIndex+1)+"/avatar").transform, false);
+        scoreCard = transform.parent.parent.gameObject.GetComponent<ScoreCard>();
+        scoreCard.Setup(playerName);
 
-        //image.color = myColour;
         GetComponent<LobbyAvatar>().SetupAvatar(avatarOptions);
-		nameField.text = deviceName;
 		readyField.gameObject.SetActive(true);
-
-		rollResultField.gameObject.SetActive(false);
-		totalPointsField.gameObject.SetActive(false);
 
 		OnClientReady(IsReady());
 	}
 
-	public void Update()
-	{
-		totalPointsField.text = "Points: " + totalPoints.ToString();
-		if (rollResult > 0) {
-			rollResultField.text = "Roll: " + rollResult.ToString();
-		} else {
-			rollResultField.text = "";
-		}
-	}
+	public void WinRound()
+    {
+        scoreCard.EarnStar();
+    }
 
 	[ClientRpc]
 	public void RpcOnStartedGame()
 	{
 		readyField.gameObject.SetActive(false);
+        scoreCard.card.SetActive(true);
+    }
 
-		rollResultField.gameObject.SetActive(true);
-		totalPointsField.gameObject.SetActive(true);
-	}
+    public void SetReady(bool isReady)
+    {
+        if (isReady)
+        {
+            SendNotReadyToBeginMessage();
+        }
+        else
+        {
+            SendReadyToBeginMessage();
+        }
 
-	void OnGUI()
+    }
+
+    void OnGUI()
 	{
 		if (isLocalPlayer)
 		{
@@ -177,4 +175,5 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 			GUILayout.EndArea();
     	}
 	}
+
 }

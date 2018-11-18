@@ -15,16 +15,24 @@ public static class GlobalPlayer
     public static void SetupPlayer()
     {
         selectedParts = new Dictionary<PartType, int>();
-        playerName = "Player1";
+        playerName = "Test";
         bank = 0;
         unlockIds = new List<int>();
 
         foreach (PartType type in Enum.GetValues(typeof(PartType)))
         {
-            selectedParts[type] = -1;
+            selectedParts[type] = 1;
         }
 
         isSetup = true;
+    }
+
+    public static Dictionary<PartType, int> AllParts()
+    {
+        if (!isSetup)
+            SetupPlayer();
+
+        return selectedParts;
     }
 
     public static void SetPart(PartType type, int index)

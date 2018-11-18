@@ -23,17 +23,8 @@ public class LobbyAvatar : MonoBehaviour
 
         for (int i = 0; i < splitOptions.Length; i++)
         {
-
-            Debug.Log(splitOptions[i]);
-            Debug.Log("Type: " + (PartType)i + " - Index: " + Int32.Parse(splitOptions[i]));
             SetPart((PartType)i, Int32.Parse(splitOptions[i]));
-
         }
-
-        //for (int i = 0; i < partIndices.Count; i++)
-        //{
-        //    SetPart((PartType)i, partIndices[i]);
-        //}
     }
 
 
@@ -71,8 +62,6 @@ public class LobbyAvatar : MonoBehaviour
 
         if (partTransform == null)
             return;
-
-        Debug.Log("set part: " + type + " - Index: " + partIndex);
 
         // Destroy children of current part
         foreach (Transform part in partTransform)

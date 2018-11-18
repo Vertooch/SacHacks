@@ -134,7 +134,7 @@ public class ExampleGameSession : NetworkBehaviour
 			List<ExamplePlayerScript> scoringPlayers = PlayersWithHighestRoll();
 			if (scoringPlayers.Count == 1)
 			{
-				scoringPlayers[0].totalPoints += 1;
+                scoringPlayers[0].WinRound();
 				specialMessage = scoringPlayers[0].deviceName + " scores 1 point!";
 			}
 			else
