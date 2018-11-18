@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class DisplayAvatar : MonoBehaviour
+public class LobbyAvatar : MonoBehaviour
 {
     public Transform head;
     public Transform eyes;
@@ -14,25 +14,36 @@ public class DisplayAvatar : MonoBehaviour
     public Transform body;
     public Transform weapon;
     public AvatarInventory inventory;
-    public Text playerName;
 
-    public void Start()
+    public void SetupAvatar(string avatarOptions)
     {
-        foreach (PartType type in Enum.GetValues(typeof(PartType)))
+        inventory = GameObject.FindObjectOfType<AvatarInventory>();
+
+        string[] splitOptions = avatarOptions.Split(',');
+
+        for (int i = 0; i < splitOptions.Length; i++)
         {
-            SetPartForType(type);
+
+            Debug.Log(splitOptions[i]);
+            Debug.Log("Type: " + (PartType)i + " - Index: " + Int32.Parse(splitOptions[i]));
+            SetPart((PartType)i, Int32.Parse(splitOptions[i]));
+
         }
 
-        playerName.text = GlobalPlayer.playerName;
+        //for (int i = 0; i < partIndices.Count; i++)
+        //{
+        //    SetPart((PartType)i, partIndices[i]);
+        //}
     }
 
-    public void SetPartForType(PartType type)
+
+    public void SetPart(PartType type, int partIndex)
     {
         Transform partTransform = null;
 
         switch (type)
         {
-            case PartType.Body : 
+            case PartType.Body:
                 partTransform = body;
                 break;
             case PartType.Eyes:
@@ -53,13 +64,15 @@ public class DisplayAvatar : MonoBehaviour
             case PartType.Weapon:
                 partTransform = weapon;
                 break;
-            default :
+            default:
                 partTransform = null;
                 break;
         }
 
-        if (partTransform == null || GlobalPlayer.IndexForType(type) == -1)
+        if (partTransform == null)
             return;
+
+        Debug.Log("set part: " + type + " - Index: " + partIndex);
 
         // Destroy children of current part
         foreach (Transform part in partTransform)
@@ -69,7 +82,7 @@ public class DisplayAvatar : MonoBehaviour
 
         // Instantiate new children in parent GameObject
         Instantiate(
-            inventory.partForTypeIndex(type, GlobalPlayer.IndexForType(type)),
+            inventory.partForTypeIndex(type, partIndex),
             partTransform,
             false);
     }

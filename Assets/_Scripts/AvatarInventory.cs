@@ -16,6 +16,12 @@ public class AvatarInventory : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (inventoryParts == null)
+            SetupInventory();
+    }
+
+    public void SetupInventory()
+    {
         inventoryParts = new Dictionary<PartType, BodyPart[]>();
 
         inventoryParts[PartType.Head] = headOptions;
@@ -30,6 +36,9 @@ public class AvatarInventory : MonoBehaviour {
 
     public GameObject partForTypeIndex(PartType type, int index)
     {
+        if (inventoryParts == null)
+            SetupInventory();
+
         return inventoryParts[type][index].gameObject;
     }
 }
