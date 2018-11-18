@@ -8,6 +8,7 @@ public class ScoreCard : MonoBehaviour {
     public GameObject card;
     public ScoreStar[] stars;
     public Text playerName;
+    public Text readyField;
 
     private int numStars = 0;
 
@@ -15,6 +16,7 @@ public class ScoreCard : MonoBehaviour {
     {
         playerName.text = name;
         gameObject.SetActive(true);
+        readyField.gameObject.SetActive(true);
     }
 
     public void EarnStar()

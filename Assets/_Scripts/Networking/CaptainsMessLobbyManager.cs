@@ -11,6 +11,8 @@ public class CaptainsMessLobbyManager : NetworkManager
     public int maxPlayers = 4;
     public CaptainsMessPlayer[] lobbySlots;
     public int maxPlayersPerConnection = 1;
+
+    protected NetworkConnection existingConnection;
     
     public void SetMaxPlayers(int value)
     {
@@ -143,6 +145,7 @@ public class CaptainsMessLobbyManager : NetworkManager
     {
         CallOnClientEnterLobby();
         base.OnClientConnect(conn);
+        existingConnection = conn;
     }
 
     public override void OnClientDisconnect(NetworkConnection conn)

@@ -40,7 +40,6 @@ public static class GlobalPlayer
         if (!isSetup)
             SetupPlayer();
 
-        Debug.Log("set part: " + type + " - Index: " + index);
         selectedParts[type] = index;
     }
 

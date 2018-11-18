@@ -21,7 +21,7 @@ public class ExampleListener : CaptainsMessListener
 	public ExampleGameSession gameSession;
     public GameObject homeButton;
 
-	public void Start()
+    public void Start()
 	{
 		networkState = NetworkState.Offline;
 

@@ -28,6 +28,16 @@ public class CaptainsMessNetworkManager : CaptainsMessLobbyManager
     private bool gameHasStarted = false;
     private bool joinedLobby = false;
 
+    public void Quit()
+    {
+        if (existingConnection != null)
+        {
+            existingConnection.Disconnect();
+            existingConnection.Dispose();
+        }
+        FinishGame();
+    }
+
     public virtual void Start ()
     {
         deviceId = GetUniqueDeviceId();

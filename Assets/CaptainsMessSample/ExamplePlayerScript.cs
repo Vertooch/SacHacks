@@ -76,6 +76,9 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 
 	public override void OnClientReady(bool readyState)
 	{
+        if (readyField == null)
+            return;
+
 		if (readyState)
 		{
 			readyField.text = "READY!";
@@ -95,7 +98,8 @@ public class ExamplePlayerScript : CaptainsMessPlayer
         scoreCard.Setup(playerName);
 
         GetComponent<LobbyAvatar>().SetupAvatar(avatarOptions);
-		readyField.gameObject.SetActive(true);
+
+        readyField = transform.parent.gameObject.GetComponentInChildren<Text>();
 
 		OnClientReady(IsReady());
 	}

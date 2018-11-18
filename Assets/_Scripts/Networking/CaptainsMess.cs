@@ -80,6 +80,11 @@ public class CaptainsMess : MonoBehaviour
         }
     }
 
+    public void Quit()
+    {
+        networkManager.Quit();
+    }
+
     public List<CaptainsMessPlayer> Players()
     {
         return networkManager.LobbyPlayers();
