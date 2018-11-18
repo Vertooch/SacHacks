@@ -7,6 +7,11 @@ public class soundPlayer : MonoBehaviour {
     [SerializeField]
     private List<AudioClip> soundClips = new List<AudioClip>();
     [SerializeField]
+    public void PlaySound()
+    {
+        AudioClip randomSound = soundClips[Random.Range(0, soundClips.Count)];
+        audioSource.PlayOneShot(randomSound);
+    }
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
