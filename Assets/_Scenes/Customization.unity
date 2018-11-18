@@ -1170,7 +1170,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4923412932988942, guid: 5cb12a150e1831e45959064bbf0a0ae0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.45
+      value: 0.386
+      objectReference: {fileID: 0}
+    - target: {fileID: 4798975982434626, guid: 5cb12a150e1831e45959064bbf0a0ae0, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cb12a150e1831e45959064bbf0a0ae0, type: 2}
