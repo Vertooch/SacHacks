@@ -26,7 +26,7 @@ public class CustomPlayer : MonoBehaviour
     {
         avatarParts = new Transform[] { head, eyes, hat, mouth, mustache, body, weapon };
         types = new List<PartType>();
-        partIndices = new int[types.Count];
+        partIndices = new int[] {0, 0, 0, 0, 0, 0, 0};
 
         foreach (PartType type in Enum.GetValues(typeof(PartType)))
         {
@@ -42,7 +42,6 @@ public class CustomPlayer : MonoBehaviour
             Destroy(part.gameObject);
         }
 
-        // Increment the index for the part
         if (partIndices[partTypeIndex] < (inventory.inventoryParts[types[partTypeIndex]].Length - 1))
         {
             partIndices[partTypeIndex]++;

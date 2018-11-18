@@ -18,6 +18,13 @@ public class AvatarInventory : MonoBehaviour {
     void Start () {
         inventoryParts = new Dictionary<PartType, BodyPart[]>();
 
+        inventoryParts[PartType.Head] = headOptions;
+        inventoryParts[PartType.Eyes] = eyesOptions;
+        inventoryParts[PartType.Hat] = hatOptions;
+        inventoryParts[PartType.Mouth] = mouthOptions;
+        inventoryParts[PartType.Mustache] = mustacheOptions;
+        inventoryParts[PartType.Body] = bodyOptions;
+        inventoryParts[PartType.Weapon] = weaponOptions;
     }
 	
 
