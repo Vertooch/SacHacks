@@ -23,7 +23,8 @@ public class DisplayAvatar : MonoBehaviour
             SetPartForType(type);
         }
 
-        playerName.text = GlobalPlayer.playerName;
+        if (playerName != null)
+            playerName.text = GlobalPlayer.playerName;
     }
 
     public void SetPartForType(PartType type)
