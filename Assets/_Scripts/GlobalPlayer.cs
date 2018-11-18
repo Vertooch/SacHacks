@@ -6,6 +6,8 @@ using UnityEngine;
 public static class GlobalPlayer
 {
     public static Dictionary<PartType, int> selectedParts;
+    public static String playerName;
+    public static bool playerNameIsDefault = true;
     public static int bank;
     public static List<int> unlockIds;
     public static bool isSetup;
@@ -13,6 +15,7 @@ public static class GlobalPlayer
     public static void SetupPlayer()
     {
         selectedParts = new Dictionary<PartType, int>();
+        playerName = "Player1";
         bank = 0;
         unlockIds = new List<int>();
 
@@ -29,7 +32,23 @@ public static class GlobalPlayer
         if (!isSetup)
             SetupPlayer();
 
+        Debug.Log("set part: " + type + " - Index: " + index);
         selectedParts[type] = index;
+    }
+
+    public static void SetPlayerName(String inputPlayerName)
+    {
+        if (inputPlayerName == "")
+        {
+            playerNameIsDefault = true;
+            playerName = "Player1";
+        }
+
+        else
+        {
+            playerNameIsDefault = false;
+            playerName = inputPlayerName;
+        }
     }
 
     public static int IndexForType(PartType type)

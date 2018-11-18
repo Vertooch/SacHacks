@@ -17,16 +17,24 @@ public class Shop : MonoBehaviour {
             if (GlobalPlayer.unlockIds.Contains(item.id))
             {
                 Debug.Log("Already purchased item");
+                alertScript._alertText.text = "Already purchased item";
+                alertScript._alertText.color = Color.red;
             }
             else
             {
                 GlobalPlayer.UnlockItem(item.id, item.cost);
                 Debug.Log("buy item: " + item.id);
                 Debug.Log("current money: " + GlobalPlayer.bank);
+                alertScript._alertText.text = "Item purchased!";
+                alertScript._alertText.color = Color.yellow;
             }
         }
         else
+        {
             Debug.Log("not enough money");
+            alertScript._alertText.text = "Not enough money";
+            alertScript._alertText.color = Color.red;
+        }
     }
 
 }
