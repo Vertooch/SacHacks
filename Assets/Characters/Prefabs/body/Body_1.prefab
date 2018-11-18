@@ -9,18 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1800524351523934}
+  m_RootGameObject: {fileID: 1966111394999622}
   m_IsPrefabAsset: 1
---- !u!1 &1800524351523934
+--- !u!1 &1966111394999622
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4284257121465274}
-  - component: {fileID: 212508727039621438}
-  - component: {fileID: 114728087106003394}
+  - component: {fileID: 4097939913536906}
+  - component: {fileID: 212679544983151286}
+  - component: {fileID: 114292134050035064}
   m_Layer: 0
   m_Name: Body_1
   m_TagString: Untagged
@@ -28,37 +28,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4284257121465274
+--- !u!4 &4097939913536906
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1800524351523934}
+  m_GameObject: {fileID: 1966111394999622}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -23.439999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114728087106003394
+--- !u!114 &114292134050035064
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1800524351523934}
+  m_GameObject: {fileID: 1966111394999622}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6420c0c66473c4b25825481e9419a0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
---- !u!212 &212508727039621438
+--- !u!212 &212679544983151286
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1800524351523934}
+  m_GameObject: {fileID: 1966111394999622}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingLayerID: 391069983
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300064, guid: e48ddf4fb7304ce4ab48711eb6617a57, type: 3}
+  m_Sprite: {fileID: 21300136, guid: b08e570699f1c8a4f9cc388204aef3bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

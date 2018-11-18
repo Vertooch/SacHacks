@@ -14,9 +14,16 @@ public class Shop : MonoBehaviour {
     {
         if (GlobalPlayer.HasEnoughMoney(item.cost))
         {
-            GlobalPlayer.UnlockItem(item.id, item.cost);
-            Debug.Log("buy item: " + item.id);
-            Debug.Log("current money: " + GlobalPlayer.bank);
+            if (GlobalPlayer.unlockIds.Contains(item.id))
+            {
+                Debug.Log("Already purchased item");
+            }
+            else
+            {
+                GlobalPlayer.UnlockItem(item.id, item.cost);
+                Debug.Log("buy item: " + item.id);
+                Debug.Log("current money: " + GlobalPlayer.bank);
+            }
         }
         else
             Debug.Log("not enough money");
