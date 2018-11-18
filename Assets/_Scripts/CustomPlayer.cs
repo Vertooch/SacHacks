@@ -31,6 +31,16 @@ public class CustomPlayer : MonoBehaviour
     private int[] partIndices;
     private List<PartType> types;
 
+    private void LoadPlayerParts()
+    {
+        partIndices = new int[types.Count];
+
+        for (int i = 0; i < (types.Count); i++)
+        {
+            partIndices[i] = GlobalPlayer.IndexForType(types[i]);
+        }
+    }
+
     private void UpdatePrevNextPartTypeText()
     {
         int prevPartTypeIndex;
@@ -90,9 +100,9 @@ public class CustomPlayer : MonoBehaviour
 
     }
 
-    private void UpdateNullBodyPart(GameObject bodyPart, PartType type, int index, bool enable)
+    private void UpdateNullBodyPart(GameObject gameObjectPart, PartType type, int index, bool enable)
     {
-        // Remove "null" body parts (no hat, no weapon, etc...)
+        // Remove "null" body parts (no hat, no weapon, not locked, etc...)
         switch (type)
         {
             default:
@@ -103,25 +113,60 @@ public class CustomPlayer : MonoBehaviour
                 if (index == 0)
                 {
                     // Turn off the SpriteRenderer
-                    bodyPart.GetComponent<SpriteRenderer>().enabled = enable;
+                    gameObjectPart.GetComponent<SpriteRenderer>().enabled = enable;
 
                     // Scale down the object
-                    bodyPart.transform.localScale = new Vector3(25, 25, 1);
+                    gameObjectPart.transform.localScale = new Vector3(25, 25, 1);
                 }
                 break;
         }
+    }
+
+    private void RemoveLockedParts()
+    {
+        // Iterate over each part type
+        foreach (PartType type in types)
+        {
+            List<BodyPart> tBodyParts = new List<BodyPart> {};
+
+            foreach (BodyPart bodyPart in inventory.inventoryParts[type])
+            {
+                if (bodyPart is ShopItem)
+                {
+                    ShopItem shopItem = (ShopItem)bodyPart;
+
+                    // Add to the temporary array (unlocked shop items)
+                    if (GlobalPlayer.unlockIds.Contains(shopItem.id))
+                    {
+                        tBodyParts.Add(bodyPart);
+                    }
+                }
+
+                // Add it to the temporary array (normal items)
+                else
+                {
+                    tBodyParts.Add(bodyPart);
+                }
+            }
+
+            // Replace previous list with our new list of body parts
+            inventory.SetInventoryParts(type, tBodyParts.ToArray()); 
+            DontDestroyOnLoad(inventory.gameObject);
+        }
+       
     }
 
     public void Start()
     {
         avatarParts = new Transform[] { head, eyes, hat, mouth, mustache, body, weapon };
         types = new List<PartType>();
-        partIndices = new int[] {0, 0, 0, 0, 0, 0, 0};
 
         foreach (PartType type in Enum.GetValues(typeof(PartType)))
         {
             types.Add(type);
         }
+
+        LoadPlayerParts();
 
         // Initialize button text
         UpdatePrevNextPartTypeText();
@@ -134,6 +179,9 @@ public class CustomPlayer : MonoBehaviour
                 UpdateNullBodyPart(part.gameObject, types[i], partIndices[i], false);
             }
         }
+
+        // Destroy items that player hasn't unlocked
+        RemoveLockedParts();
 
         // Instantiate initial next and prev button objects
         UpdatePrevNextButtons();

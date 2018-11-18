@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4842659232685814}
   - component: {fileID: 212127630674593686}
-  - component: {fileID: 114278052408078778}
+  - component: {fileID: 114441349908884000}
   m_Layer: 0
   m_Name: Hat_6
   m_TagString: Untagged
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114278052408078778
+--- !u!114 &114441349908884000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,10 +49,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1650089860142756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6420c0c66473c4b25825481e9419a0f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 570d5d8417ec84ac1a122193e449c7fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  id: 5
+  cost: 100
 --- !u!212 &212127630674593686
 SpriteRenderer:
   m_ObjectHideFlags: 1

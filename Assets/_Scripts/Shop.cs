@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class Shop : MonoBehaviour {
+
+    public Text messageText;
+    public Text titleText;
 
     public void AddMoney()
     {
@@ -12,21 +17,23 @@ public class Shop : MonoBehaviour {
 
     public void BuyItem(ShopItem item)
     {
+        if (messageText == null)
+            messageText = gameObject.GetComponentInChildren<Text>();
+
         if (GlobalPlayer.HasEnoughMoney(item.cost))
         {
             if (GlobalPlayer.unlockIds.Contains(item.id))
             {
-                Debug.Log("Already purchased item");
+                messageText.text = "Already purchased!";
             }
+
             else
             {
                 GlobalPlayer.UnlockItem(item.id, item.cost);
-                Debug.Log("buy item: " + item.id);
-                Debug.Log("current money: " + GlobalPlayer.bank);
+                messageText.text = "Item Purchased!";
             }
         }
         else
-            Debug.Log("not enough money");
+            messageText.text = "Not Enough Money!";
     }
-
 }
