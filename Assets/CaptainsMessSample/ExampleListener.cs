@@ -16,8 +16,9 @@ public class ExampleListener : CaptainsMessListener
 	};
 	[HideInInspector]
 	public NetworkState networkState = NetworkState.Init;
-	
-	public GameObject gameSessionPrefab;
+
+    public GameObject[] games;
+    public GameObject gameSessionPrefab;
 	public ExampleGameSession gameSession;
 
     public void Start()
@@ -25,7 +26,22 @@ public class ExampleListener : CaptainsMessListener
 		networkState = NetworkState.Offline;
 
 		ClientScene.RegisterPrefab(gameSessionPrefab);
-	}
+
+        foreach (GameObject game in games)
+        {
+            Debug.Log(ClientScene.prefabs.Count);
+            Debug.Log("REGISTER " + game.name);
+            ClientScene.RegisterPrefab(game);
+            Debug.Log(ClientScene.prefabs.Count);
+        }
+
+        foreach (GameObject go in ClientScene.prefabs.Values)
+        {
+            Debug.Log(go.name);
+        }
+
+        GameObject.Find("Canvas").SetActive(true);
+    }
 
 	public override void OnStartConnecting()
 	{
@@ -43,7 +59,8 @@ public class ExampleListener : CaptainsMessListener
 		ExampleGameSession oldSession = FindObjectOfType<ExampleGameSession>();
 		if (oldSession == null)
 		{
-            GameObject serverSession = Instantiate(gameSessionPrefab, GameObject.Find("Canvas").transform, false);
+            GameObject serverSession = Instantiate(gameSessionPrefab);
+            serverSession.GetComponent<ExampleGameSession>().SetGames(games);
 
             NetworkServer.Spawn(serverSession);
 		}

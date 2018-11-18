@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Minigame : MonoBehaviour {
+public class Minigame : NetworkBehaviour
+{
+    [SyncVar]
+    public NetworkInstanceId parentNetId;
 
     protected ExamplePlayerScript localPlayer;
 
@@ -14,5 +18,5 @@ public class Minigame : MonoBehaviour {
                 localPlayer = player;
         }
 	}
-	
+
 }

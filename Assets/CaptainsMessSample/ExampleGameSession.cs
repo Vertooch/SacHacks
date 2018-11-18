@@ -18,24 +18,32 @@ public enum GameState
 
 public class ExampleGameSession : NetworkBehaviour
 {
-	public Text gameStateField;
-    public GameObject gameField;
-    public GameObject[] games;
+    public Text gameStateField;
     private int gameIndex = 0;
+    private GameObject[] games;
+    private GameObject spawnedGame;
 
-	public static ExampleGameSession instance;
+    public static ExampleGameSession instance;
 
 	ExampleListener networkListener;
 	List<ExamplePlayerScript> players;
 	string specialMessage = "";
 
+    public void SetGames(GameObject[] _games)
+    {
+        games = _games;
+    }
+
 	[SyncVar]
 	public GameState gameState;
 
-	[SyncVar]
+    [SyncVar]
+    public NetworkInstanceId parentNetId;
+
+    [SyncVar]
 	public string message = "";
 
-	public void OnDestroy()
+    public void OnDestroy()
 	{
 		if (gameStateField != null) {
 			gameStateField.text = "";
@@ -53,9 +61,6 @@ public class ExampleGameSession : NetworkBehaviour
 	[Server]
 	public void OnStartGame(List<CaptainsMessPlayer> aStartingPlayers)
 	{
-        foreach (GameObject game in games)
-            ClientScene.RegisterPrefab(game);
-
         players = aStartingPlayers.Select(p => p as ExamplePlayerScript).ToList();
 
 		RpcOnStartedGame();
@@ -72,7 +77,6 @@ public class ExampleGameSession : NetworkBehaviour
 		RpcOnAbortedGame();
 	}
 
-	[Client]
 	public override void OnStartClient()
 	{
 		if (instance) {
@@ -80,7 +84,7 @@ public class ExampleGameSession : NetworkBehaviour
 		}
 		instance = this;
 
-		networkListener = FindObjectOfType<ExampleListener>();
+        networkListener = FindObjectOfType<ExampleListener>();
 		networkListener.gameSession = this;
 
 		if (gameState != GameState.Lobby) {
@@ -169,16 +173,18 @@ public class ExampleGameSession : NetworkBehaviour
     private void SpawnGame()
     {
         Debug.Log("spawning game..." + gameIndex);
-        GameObject newGameObject = Instantiate(games[gameIndex], gameField.transform, false);
-        Minigame newGame = newGameObject.GetComponent<Minigame>();
+        spawnedGame =  Instantiate(games[gameIndex]);
+
+        NetworkServer.Spawn(spawnedGame);
+
+        Minigame newGame = spawnedGame.GetComponent<Minigame>();
 
         gameIndex = (gameIndex + 1) % games.Length;
     }
 
     private void ClearGame()
     {
-        foreach (Transform child in gameField.transform)
-            Destroy(child.gameObject);
+        NetworkServer.Destroy(spawnedGame);
     }
 
     [Server]
@@ -216,6 +222,9 @@ public class ExampleGameSession : NetworkBehaviour
 
 	void Update()
 	{
+        if (gameStateField == null)
+            return;
+
 		if (isServer)
 		{
 			if (gameState == GameState.Countdown)

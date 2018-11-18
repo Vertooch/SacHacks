@@ -7,8 +7,14 @@ public class MainLobby : MonoBehaviour {
     public CaptainsMess mess;
     public GameObject homeButton;
 
+    private void Awake()
+    {
+        gameObject.SetActive(true);
+    }
+
     // Use this for initialization
     void Start () {
+        Debug.Log("main lobby start");
         Invoke("Connect", 1.0f);
 	}
 

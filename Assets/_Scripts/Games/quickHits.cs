@@ -8,7 +8,8 @@ public class quickHits : Minigame {
 
     public void Hit()
     {
-        localPlayer.CmdSubmitScore(1);
+        System.Random rnd = new System.Random();
+        localPlayer.CmdSubmitScore(rnd.Next(100));
     }
 
 
