@@ -19,9 +19,8 @@ public class ExampleListener : CaptainsMessListener
 	
 	public GameObject gameSessionPrefab;
 	public ExampleGameSession gameSession;
-    public GameObject homeButton;
 
-	public void Start()
+    public void Start()
 	{
 		networkState = NetworkState.Offline;
 
@@ -95,6 +94,5 @@ public class ExampleListener : CaptainsMessListener
     public void GameOver()
     {
         Destroy(gameSession.gameObject);
-        homeButton.SetActive(true);
     }
 }

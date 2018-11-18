@@ -27,6 +27,11 @@ public static class GlobalPlayer
         isSetup = true;
     }
 
+    public static void AddScore(int score)
+    {
+        GameObject.FindObjectOfType<ScoreKeeper>().AddScore(playerName, score);
+    }
+
     public static Dictionary<PartType, int> AllParts()
     {
         if (!isSetup)
@@ -40,7 +45,6 @@ public static class GlobalPlayer
         if (!isSetup)
             SetupPlayer();
 
-        Debug.Log("set part: " + type + " - Index: " + index);
         selectedParts[type] = index;
     }
 

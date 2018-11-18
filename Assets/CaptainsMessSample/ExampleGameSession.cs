@@ -19,7 +19,6 @@ public enum GameState
 public class ExampleGameSession : NetworkBehaviour
 {
 	public Text gameStateField;
-	public Text gameRulesField;
 
 	public static ExampleGameSession instance;
 
@@ -38,9 +37,6 @@ public class ExampleGameSession : NetworkBehaviour
 		if (gameStateField != null) {
 			gameStateField.text = "";
 			gameStateField.gameObject.SetActive(false);
-		}
-		if (gameRulesField != null) {
-			gameRulesField.gameObject.SetActive(false);
 		}
 	}
 
@@ -134,8 +130,10 @@ public class ExampleGameSession : NetworkBehaviour
 			List<ExamplePlayerScript> scoringPlayers = PlayersWithHighestRoll();
 			if (scoringPlayers.Count == 1)
 			{
-                scoringPlayers[0].WinRound();
-				specialMessage = scoringPlayers[0].deviceName + " scores 1 point!";
+                Debug.Log("award point");
+                scoringPlayers[0].totalPoints += 1;
+                scoringPlayers[0].cash += 10;
+                specialMessage = scoringPlayers[0].playerName + " scores 1 point!";
 			}
 			else
 			{
@@ -147,15 +145,17 @@ public class ExampleGameSession : NetworkBehaviour
 		}
 
 		// Declare winner!
-		specialMessage = PlayerWithHighestScore().deviceName + " WINS!";
+        specialMessage = PlayerWithHighestScore().playerName + " WINS!";
 		yield return new WaitForSeconds(3);
-		specialMessage = "";
-        Debug.Log("gameover");
 
-		// Game over
-		gameState = GameState.GameOver;
-        networkListener.GameOver();
-	}
+        foreach (ExamplePlayerScript p in players)
+        {
+            p.quit = true;
+        }
+
+        // Game over
+        gameState = GameState.GameOver;
+    }
 
 	[Server]
 	bool AllPlayersHaveRolled()
@@ -202,10 +202,6 @@ public class ExampleGameSession : NetworkBehaviour
 			{
 				message = specialMessage;
 			}
-			else
-			{
-				message = gameState.ToString();
-			}
 		}
 
 		gameStateField.text = message;
@@ -216,12 +212,10 @@ public class ExampleGameSession : NetworkBehaviour
 	[ClientRpc]
 	public void RpcOnStartedGame()
 	{
-		gameRulesField.gameObject.SetActive(true);
 	}
 
 	[ClientRpc]
 	public void RpcOnAbortedGame()
 	{
-		gameRulesField.gameObject.SetActive(false);
 	}
 }
