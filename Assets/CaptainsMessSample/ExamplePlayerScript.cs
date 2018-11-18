@@ -38,13 +38,13 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 		myColour = UnityEngine.Random.ColorHSV(0,1,1,1,1,1);
 		CmdSetCustomPlayerInfo(myColour);
 
-        //foreach(int val in GlobalPlayer.selectedParts.Values)
-        //{
-        //    avatarOptions += val.ToString();
-        //    avatarOptions += ",";
-        //}
-        //avatarOptions = avatarOptions.Remove(avatarOptions.Length - 1);
-        //CmdSetAvatar(avatarOptions);
+        foreach(int val in GlobalPlayer.selectedParts.Values)
+        {
+            avatarOptions += val.ToString();
+            avatarOptions += ",";
+        }
+        avatarOptions = avatarOptions.Remove(avatarOptions.Length - 1);
+        CmdSetAvatar(avatarOptions);
     }
 
 	[Command]
