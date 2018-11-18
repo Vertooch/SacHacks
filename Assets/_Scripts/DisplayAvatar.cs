@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisplayAvatar : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class DisplayAvatar : MonoBehaviour
     public Transform body;
     public Transform weapon;
     public AvatarInventory inventory;
+    public Text playerName;
 
     public void Start()
     {
@@ -21,6 +23,8 @@ public class DisplayAvatar : MonoBehaviour
         {
             SetPartForType(type);
         }
+
+        playerName.text = GlobalPlayer.playerName;
     }
 
     public void SetPartForType(PartType type)
