@@ -17,6 +17,9 @@ public class CustomPlayer : MonoBehaviour
     public Transform prevPartButton;
     public Transform nextPartButton;
 
+    public Button prevPartTypeButton;
+    public Button nextPartTypeButton;
+
     public AvatarInventory inventory;
     public Text avatarPartText;
 
@@ -25,6 +28,23 @@ public class CustomPlayer : MonoBehaviour
     private int partTypeIndex;
     private int[] partIndices;
     private List<PartType> types;
+
+    private void UpdatePrevNextPartTypeText()
+    {
+        int prevPartTypeIndex;
+        int nextPartTypeIndex;
+
+        // Set previous and next text indices 
+        prevPartTypeIndex = partTypeIndex == 0 ? types.Count - 1 : partTypeIndex - 1;
+        nextPartTypeIndex = partTypeIndex == (types.Count - 1) ? 0 : partTypeIndex + 1;
+
+        // Update the button text
+        prevPartTypeButton.GetComponentInChildren<Text>().text = 
+            Enum.GetName(typeof(PartType), types[prevPartTypeIndex]);
+
+        nextPartTypeButton.GetComponentInChildren<Text>().text =
+            Enum.GetName(typeof(PartType), types[nextPartTypeIndex]);
+    }
 
     private void UpdatePrevNextButtons()
     {
@@ -78,6 +98,10 @@ public class CustomPlayer : MonoBehaviour
 
         // Instantiate initial next and prev button objects
         UpdatePrevNextButtons();
+
+        // Initialize button text
+        UpdatePrevNextPartTypeText();
+
     }
 
     public void IncrementPartOption()
@@ -160,6 +184,7 @@ public class CustomPlayer : MonoBehaviour
         avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
 
         UpdatePrevNextButtons();
+        UpdatePrevNextPartTypeText();
     }
 
     public void DecrementAvatarPart()
@@ -179,5 +204,6 @@ public class CustomPlayer : MonoBehaviour
         avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
 
         UpdatePrevNextButtons();
+        UpdatePrevNextPartTypeText();
     }
 }
