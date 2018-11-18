@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GlobalPlayer  {
+public class GlobalPlayer : MonoBehaviour
+{
 
-    public static string name;
+    private Dictionary<PartType, int> selectedParts;
 
+    // Use this for initialization
+    void Start()
+    {
+        selectedParts = new Dictionary<PartType, int>();
+    }
+
+    // Update is called once per frame
+    public void SetPart(PartType type, int index)
+    {
+        selectedParts[type] = index;
+    }
 }

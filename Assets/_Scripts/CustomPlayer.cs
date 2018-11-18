@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,83 +13,76 @@ public class CustomPlayer : MonoBehaviour
     public Transform mustache;
     public Transform body;
     public Transform weapon;
-
-    public GameObject[] headOptions;
-    public GameObject[] eyesOptions;
-    public GameObject[] hatOptions;
-    public GameObject[] mouthOptions;
-    public GameObject[] mustacheOptions;
-    public GameObject[] bodyOptions;
-    public GameObject[] weaponOptions;
-
+    public AvatarInventory inventory;
     public Text avatarPartText;
 
     private Transform[] avatarParts;
-    private GameObject[][] partOptions;
 
-    private int avatarPartIndex;
-    private int[] partOptionsIndices;
-    private string[] avatarPartName;
+    private int partTypeIndex;
+    private int[] partIndices;
+    private List<PartType> types;
 
     public void Start()
     {
         avatarParts = new Transform[] { head, eyes, hat, mouth, mustache, body, weapon };
-        partOptions = new GameObject[][] { headOptions, eyesOptions, hatOptions, mouthOptions, mustacheOptions, bodyOptions, weaponOptions };
-        avatarPartName = new string[] { "Head", "Eyes", "Hat", "Mouth", "Mustache", "Body", "Weapon" };
+        types = new List<PartType>();
+        partIndices = new int[types.Count];
 
-        avatarPartIndex = 0;
-        partOptionsIndices = new int[avatarParts.Length];
+        foreach (PartType type in Enum.GetValues(typeof(PartType)))
+        {
+            types.Add(type);
+        }
     }
 
     public void IncrementPartOption()
     {
         // Destroy children of current part
-        foreach (Transform part in avatarParts[avatarPartIndex])
+        foreach (Transform part in avatarParts[partTypeIndex])
         {
             Destroy(part.gameObject);
         }
 
         // Increment the index for the part
-        if (partOptionsIndices[avatarPartIndex] < (partOptions[avatarPartIndex].Length - 1))
+        if (partIndices[partTypeIndex] < (inventory.inventoryParts[types[partTypeIndex]].Length - 1))
         {
-            partOptionsIndices[avatarPartIndex]++;
+            partIndices[partTypeIndex]++;
         }
 
         else
         {
-            partOptionsIndices[avatarPartIndex] = 0;
+            partIndices[partTypeIndex] = 0;
         }
 
         // Instantiate new children in parent GameObject
         Instantiate(
-            partOptions[avatarPartIndex][partOptionsIndices[avatarPartIndex]],
-            avatarParts[avatarPartIndex],
+            inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
+            avatarParts[partTypeIndex],
             false);
     }
 
     public void DecrementPartOption()
     {
         // Destroy children of current part
-        foreach (Transform part in avatarParts[avatarPartIndex])
+        foreach (Transform part in avatarParts[partTypeIndex])
         {
-            Destroy(part);
+            Destroy(part.gameObject);
         }
 
         // Descrement the index for the part
-        if (partOptionsIndices[avatarPartIndex] > 0)
+        if (partIndices[partTypeIndex] > 0)
         {
-            partOptionsIndices[avatarPartIndex]--;
+            partIndices[partTypeIndex]--;
         }
 
         else
         {
-            partOptionsIndices[avatarPartIndex] = partOptions[avatarPartIndex].Length - 1;
+            partIndices[partTypeIndex] = inventory.inventoryParts[types[partTypeIndex]].Length - 1;
         }
 
         // Instantiate new children in parent GameObject
         Instantiate(
-            partOptions[avatarPartIndex][partOptionsIndices[avatarPartIndex]],
-            avatarParts[avatarPartIndex],
+            inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
+            avatarParts[partTypeIndex],
             false);
     }
 
@@ -96,33 +90,33 @@ public class CustomPlayer : MonoBehaviour
     {
         Debug.Log("Increment Part Type");
 
-        if (avatarPartIndex < (avatarParts.Length - 1))
+        if (partTypeIndex < (types.Count - 1))
         {
-            avatarPartIndex++;
+            partTypeIndex++;
         }
 
         else
         {
-            avatarPartIndex = 0;
+            partTypeIndex = 0;
         }
 
-        avatarPartText.text = avatarPartName[avatarPartIndex];
+        avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
     }
 
     public void DecrementAvatarPart()
     {
         Debug.Log("Decrement Part Type");
 
-        if (avatarPartIndex > 0)
+        if (partTypeIndex > 0)
         {
-            avatarPartIndex--;
+            partTypeIndex--;
         }
 
         else
         {
-            avatarPartIndex = avatarParts.Length - 1;
+            partTypeIndex = types.Count - 1;
         }
 
-        avatarPartText.text = avatarPartName[avatarPartIndex];
+        avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
     }
 }
