@@ -19,10 +19,12 @@ public class ScoreCard : MonoBehaviour {
         readyField.gameObject.SetActive(true);
     }
 
-    public void EarnStar()
+    public void SetStars(int newNumStars)
     {
-        stars[numStars].Activate();
-        numStars++;
+        if (numStars < newNumStars)
+            stars[newNumStars - 1].Activate();
+
+        numStars = newNumStars - 1;
     }
 
 }

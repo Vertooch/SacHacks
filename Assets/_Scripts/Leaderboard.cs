@@ -16,21 +16,6 @@ public class Leaderboard : MonoBehaviour {
     private readonly int nu;
     public HighScore[] HighScoresList;
 
-    public void AddNewHighScore(string username, int score) {
-        StartCoroutine(UploadNewHighScore(username, score));
-    }
-    IEnumerator UploadNewHighScore(string username, int score) {
-        WWW www = new WWW(webUrl + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score);
-        yield return www;
-
-        if (string.IsNullOrEmpty(www.error)) {
-            print("success!");
-            //print(username);
-            //print(score);
-        } else {
-            print("failed! " + www.error);
-        }
-    }
     IEnumerator DownloadHighScoresFromDatabase()
     {
         WWW www = new WWW(webUrl + publicCode + "/pipe/0/5");
@@ -83,7 +68,5 @@ public class Leaderboard : MonoBehaviour {
             score.GetComponent<Text>().text = scoreEntries[i];
         }
     }
-    void Start () {
-	}
 	
 }

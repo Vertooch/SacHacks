@@ -22,6 +22,12 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 	[SyncVar]
 	public int totalPoints;
 
+    [SyncVar]
+    public bool quit;
+
+    [SyncVar]
+    public int cash;
+
     private ScoreCard scoreCard;
 
 
@@ -104,13 +110,18 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 		OnClientReady(IsReady());
 	}
 
-	public void WinRound()
+    public void Update()
     {
-        scoreCard.EarnStar();
-        totalPoints++;
+        if (quit)
+            GameOver();
+
+        if (totalPoints < 1)
+            return;
+
+        scoreCard.SetStars(totalPoints);
     }
 
-	[ClientRpc]
+    [ClientRpc]
 	public void RpcOnStartedGame()
 	{
 		readyField.gameObject.SetActive(false);
@@ -163,16 +174,6 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 						}
 					}
 				}
-				else if (gameSession.gameState == GameState.GameOver)
-				{
-					if (isServer)
-					{
-						if (GUILayout.Button("Play Again", GUILayout.Width(Screen.width * 0.3f), GUILayout.Height(100)))
-						{
-							CmdPlayAgain();
-						}
-					}
-				}
 			}
 
 			GUILayout.FlexibleSpace();
@@ -180,5 +181,12 @@ public class ExamplePlayerScript : CaptainsMessPlayer
 			GUILayout.EndArea();
     	}
 	}
+
+    public void GameOver()
+    {
+        GlobalPlayer.bank += cash;
+        GlobalPlayer.AddScore(totalPoints);
+        GameObject.FindObjectOfType<MainLobby>().GameOver();
+    }
 
 }
