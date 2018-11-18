@@ -13,6 +13,10 @@ public class CustomPlayer : MonoBehaviour
     public Transform mustache;
     public Transform body;
     public Transform weapon;
+
+    public Transform prevPartButton;
+    public Transform nextPartButton;
+
     public AvatarInventory inventory;
     public Text avatarPartText;
 
@@ -21,6 +25,45 @@ public class CustomPlayer : MonoBehaviour
     private int partTypeIndex;
     private int[] partIndices;
     private List<PartType> types;
+
+    private void UpdatePrevNextButtons()
+    {
+        int prevPartIndex;
+        int nextPartIndex;
+        int maxPartIndex;
+
+        maxPartIndex = inventory.inventoryParts[types[partTypeIndex]].Length - 1;
+
+        // Set previous part index
+        prevPartIndex = partIndices[partTypeIndex] == 0 ? maxPartIndex : partIndices[partTypeIndex] - 1;
+        nextPartIndex = partIndices[partTypeIndex] == maxPartIndex ? 0 : partIndices[partTypeIndex] + 1;
+
+        // Destroy and instantiate next and previous buttons
+        foreach (Transform prevButton in prevPartButton)
+        {
+            Destroy(prevButton.gameObject);
+        }
+
+        foreach (Transform nextButton in nextPartButton)
+        {
+            Destroy(nextButton.gameObject);
+        }
+
+        GameObject tNextButton = 
+            Instantiate(inventory.partForTypeIndex(types[partTypeIndex], nextPartIndex),
+                        nextPartButton,
+                        false);
+
+        GameObject tPrevButton =
+            Instantiate(inventory.partForTypeIndex(types[partTypeIndex], prevPartIndex),
+                        prevPartButton,
+                        false);
+
+        // Scale the resulting buttons
+        tNextButton.transform.localScale = new Vector3(50, 50, 1);
+        tPrevButton.transform.localScale = new Vector3(50, 50, 1);
+
+    }
 
     public void Start()
     {
@@ -32,17 +75,24 @@ public class CustomPlayer : MonoBehaviour
         {
             types.Add(type);
         }
+
+        // Instantiate initial next and prev button objects
+        UpdatePrevNextButtons();
     }
 
     public void IncrementPartOption()
     {
+        int maxPartIndex;
+
+        maxPartIndex = inventory.inventoryParts[types[partTypeIndex]].Length - 1;
+
         // Destroy children of current part
         foreach (Transform part in avatarParts[partTypeIndex])
         {
             Destroy(part.gameObject);
         }
 
-        if (partIndices[partTypeIndex] < (inventory.inventoryParts[types[partTypeIndex]].Length - 1))
+        if (partIndices[partTypeIndex] < maxPartIndex)
         {
             partIndices[partTypeIndex]++;
         }
@@ -57,10 +107,16 @@ public class CustomPlayer : MonoBehaviour
             inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
             avatarParts[partTypeIndex],
             false);
+
+        UpdatePrevNextButtons();
     }
 
     public void DecrementPartOption()
     {
+        int maxPartIndex;
+
+        maxPartIndex = inventory.inventoryParts[types[partTypeIndex]].Length - 1;
+
         // Destroy children of current part
         foreach (Transform part in avatarParts[partTypeIndex])
         {
@@ -75,7 +131,7 @@ public class CustomPlayer : MonoBehaviour
 
         else
         {
-            partIndices[partTypeIndex] = inventory.inventoryParts[types[partTypeIndex]].Length - 1;
+            partIndices[partTypeIndex] = maxPartIndex;
         }
 
         // Instantiate new children in parent GameObject
@@ -83,6 +139,8 @@ public class CustomPlayer : MonoBehaviour
             inventory.partForTypeIndex(types[partTypeIndex], partIndices[partTypeIndex]),
             avatarParts[partTypeIndex],
             false);
+
+        UpdatePrevNextButtons();
     }
 
     public void IncrementAvatarPart()
@@ -100,6 +158,8 @@ public class CustomPlayer : MonoBehaviour
         }
 
         avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
+
+        UpdatePrevNextButtons();
     }
 
     public void DecrementAvatarPart()
@@ -117,5 +177,7 @@ public class CustomPlayer : MonoBehaviour
         }
 
         avatarPartText.text = Enum.GetName(typeof(PartType), types[partTypeIndex]);
+
+        UpdatePrevNextButtons();
     }
 }
