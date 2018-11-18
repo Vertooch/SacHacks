@@ -19,4 +19,9 @@ public class SceneChanger : MonoBehaviour {
     {
         SceneManager.LoadScene("Test2");
     }
+
+    public void GoToShop()
+    {
+        SceneManager.LoadScene("ItemShop");
+    }
 }
