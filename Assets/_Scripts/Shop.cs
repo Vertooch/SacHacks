@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Shop : MonoBehaviour {
-
+    private soundPlayer purchaseSound;
     public void AddMoney()
     {
         GlobalPlayer.AddMoney(100);
@@ -25,6 +25,7 @@ public class Shop : MonoBehaviour {
                 GlobalPlayer.UnlockItem(item.id, item.cost);
                 Debug.Log("buy item: " + item.id);
                 Debug.Log("current money: " + GlobalPlayer.bank);
+
                 alertScript._alertText.text = "Item purchased!";
                 alertScript._alertText.color = Color.yellow;
             }
